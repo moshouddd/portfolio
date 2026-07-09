@@ -560,11 +560,16 @@ ul { list-style: none; }
   flex-shrink: 0;
   object-fit: contain;
   padding: 6px;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.1);
+  transition: var(--transition);
 }
-.skill-card__icon[src$=".svg"] {
-  /* 确保 SVG 图标在暗色背景上可见 */
-  padding: 4px;
+.skill-card:hover .skill-card__icon {
+  background: rgba(255,255,255,0.18);
+}
+.skill-card__icon[src*="simple-icons"] {
+  /* Simple Icons 部分图标偏暗，略微提亮 */
+  filter: brightness(1.2);
+  padding: 7px;
 }
 .skill-card__name {
   font-family: var(--font-mono);
@@ -818,16 +823,16 @@ ul { list-style: none; }
       </div>
     </div>
 
-    <!-- 技能工具 — 使用 Simple Icons 官方品牌矢量图标 -->
+    <!-- 技能工具 — Devicon (Adobe) + Simple Icons (C4D/Octane/DR) + 内联 SVG (MJ/SD) -->
     <div class="skills-wrap reveal">
       <p class="skills-title">▸ 技能工具</p>
       <div class="skills__grid">
         <div class="skill-card" data-content="skill-card">
-          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/adobephotoshop.svg" alt="Photoshop" width="48" height="48" loading="lazy" />
+          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/photoshop/photoshop-original.svg" alt="Photoshop" width="48" height="48" loading="lazy" />
           <span class="skill-card__name" data-content="skill-tag">Photoshop</span>
         </div>
         <div class="skill-card" data-content="skill-card">
-          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/adobeillustrator.svg" alt="Illustrator" width="48" height="48" loading="lazy" />
+          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/illustrator/illustrator-original.svg" alt="Illustrator" width="48" height="48" loading="lazy" />
           <span class="skill-card__name" data-content="skill-tag">Illustrator</span>
         </div>
         <div class="skill-card" data-content="skill-card">
@@ -835,7 +840,7 @@ ul { list-style: none; }
           <span class="skill-card__name" data-content="skill-tag">Cinema 4D</span>
         </div>
         <div class="skill-card" data-content="skill-card">
-          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/adobeaftereffects.svg" alt="After Effects" width="48" height="48" loading="lazy" />
+          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/aftereffects/aftereffects-original.svg" alt="After Effects" width="48" height="48" loading="lazy" />
           <span class="skill-card__name" data-content="skill-tag">After Effects</span>
         </div>
         <div class="skill-card" data-content="skill-card">
@@ -843,15 +848,26 @@ ul { list-style: none; }
           <span class="skill-card__name" data-content="skill-tag">Octane Render</span>
         </div>
         <div class="skill-card" data-content="skill-card">
-          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/adobepremierepro.svg" alt="Premiere Pro" width="48" height="48" loading="lazy" />
+          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/premierepro/premierepro-original.svg" alt="Premiere Pro" width="48" height="48" loading="lazy" />
           <span class="skill-card__name" data-content="skill-tag">Premiere Pro</span>
         </div>
         <div class="skill-card" data-content="skill-card">
-          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/midjourney.svg" alt="Midjourney" width="48" height="48" loading="lazy" />
+          <svg class="skill-card__icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="10" fill="#1a1a2e"/>
+            <path d="M8 36 L20 14 L18 14 L8 34 M28 14 L40 36" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 36 L24 26 L40 36" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="24" y1="26" x2="24" y2="8" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
           <span class="skill-card__name" data-content="skill-tag">Midjourney</span>
         </div>
         <div class="skill-card" data-content="skill-card">
-          <img class="skill-card__icon" src="https://cdn.jsdelivr.net/npm/simple-icons@14/icons/stabilitydotai.svg" alt="Stable Diffusion" width="48" height="48" loading="lazy" />
+          <svg class="skill-card__icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="10" fill="#1c0a28"/>
+            <circle cx="24" cy="24" r="16" fill="none" stroke="#e040fb" stroke-width="2"/>
+            <path d="M24 8 Q30 20 24 34 Q18 24 24 14" fill="none" stroke="#ff4081" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M24 14 Q28 24 24 40" fill="none" stroke="#7c4dff" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="24" cy="24" r="3" fill="#fff"/>
+          </svg>
           <span class="skill-card__name" data-content="skill-tag">Stable Diffusion</span>
         </div>
         <div class="skill-card" data-content="skill-card">
