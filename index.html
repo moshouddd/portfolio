@@ -1,0 +1,1142 @@
+<!--
+  ============================================================
+  🎨 作品集网页框架 — 编辑索引
+  ============================================================
+  使用方法: Ctrl+F 搜索下面的 data-content 值即可快速定位要修改的内容
+
+  【个人信息】
+  "hero-name"        — 主标题名字
+  "hero-title"       — 副标题/职位
+  "avatar-img"       — 头像图片 src
+  "bio-name"         — 姓名
+  "bio-phone"        — 电话
+  "bio-email"        — 邮箱
+  "bio-wechat"       — 微信
+  "bio-text-1"~"4"   — 个人介绍段落
+  "stat-years"       — 工作经验年数
+  "stat-projects"    — 完成项目数
+  "stat-clients"     — 服务客户数
+
+  【技能标签】
+  "skill-tag"        — 每一条技能标签
+
+  【分类缩略图】
+  "category-1"~"4"   — 四个分类名称
+  "category-1-count"~"4-count" — 分类作品数量
+
+  【1/4 ~ 4/4 板块】
+  "section-title"    — 板块标题
+  "section-number"   — 板块编号
+  "tool-tag"         — 工具标签
+
+  【作品图片】
+  "gallery-image"    — 所有作品图片
+  "project-title"    — 项目名称
+
+  【联系方式】
+  "footer-text"      — Footer 版权文字
+  "cta-text"         — CTA 标语
+
+  【图片占位符说明】
+  所有图片使用 SVG 占位符，显示为深色方块+推荐尺寸文字
+  替换方式: 将 src="data:image/svg+xml,..." 改为 src="你的图片路径.jpg"
+  推荐格式: JPG/WebP, 800x600 或 1200x800
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品集</title>
+<style>
+/* ============================================================
+   CSS 变量 — 在这里修改全局配色和样式
+   ============================================================ */
+:root {
+  /* 颜色 */
+  --bg-primary:     #0a0a0a;
+  --bg-secondary:   #0f0f12;
+  --bg-tertiary:    #141418;
+  --neon-blue:      #00d4ff;
+  --neon-purple:    #b347ea;
+  --neon-pink:      #ff2d95;
+  --neon-green:     #00ff88;
+  --text-primary:   #e8e8ed;
+  --text-secondary: #8888a0;
+  --text-dim:       #555566;
+  --border-subtle:  rgba(255,255,255,0.08);
+  --border-default: rgba(255,255,255,0.12);
+  --border-glow:    rgba(0,212,255,0.25);
+
+  /* 间距 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 32px;
+  --space-xl: 64px;
+  --space-2xl: 120px;
+
+  /* 字体 */
+  --font-display: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --font-mono:    'Cascadia Code', 'Fira Code', 'Courier New', monospace;
+  --font-body:    'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+
+  /* 字号 */
+  --fs-hero:    clamp(3.5rem, 8vw, 7rem);
+  --fs-heading: clamp(1.5rem, 3.5vw, 2.5rem);
+  --fs-subhead: clamp(0.95rem, 1.5vw, 1.15rem);
+  --fs-body:    0.95rem;
+  --fs-small:   0.82rem;
+  --fs-caption: 0.75rem;
+
+  /* 特效 */
+  --glow-blue:   0 0 20px rgba(0,212,255,0.35), 0 0 60px rgba(0,212,255,0.12);
+  --glow-purple: 0 0 20px rgba(179,71,234,0.35), 0 0 60px rgba(179,71,234,0.12);
+  --glow-pink:   0 0 20px rgba(255,45,149,0.35), 0 0 60px rgba(255,45,149,0.12);
+  --transition:  0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* 布局 */
+  --content-max: 1200px;
+  --section-gap: var(--space-2xl);
+}
+
+/* ============================================================
+   CSS Reset
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) var(--bg-primary);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; height: auto; }
+ul { list-style: none; }
+
+/* ============================================================
+   通用组件
+   ============================================================ */
+
+/* 板块包裹 */
+.section {
+  width: 100%;
+  padding: var(--section-gap) var(--space-lg);
+}
+.section__inner {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+/* 板块标题组件 */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.section-header__badge {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--border-default);
+  color: var(--neon-blue);
+  font-family: var(--font-mono);
+  font-size: var(--fs-subhead);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  transition: var(--transition);
+}
+.section:hover .section-header__badge {
+  border-color: var(--border-glow);
+  box-shadow: var(--glow-blue);
+}
+.section-header__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+}
+.section-header__line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-default), transparent);
+  margin-left: var(--space-md);
+}
+
+/* 工具标签 */
+.tool-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+.tool-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  transition: var(--transition);
+  cursor: default;
+}
+.tool-tag::before {
+  content: '□';
+  font-size: 0.7em;
+  color: var(--text-dim);
+}
+.tool-tag:hover {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+  box-shadow: var(--glow-blue);
+}
+
+/* 子标题 */
+.sub-heading {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: var(--space-lg) 0 var(--space-md);
+  padding-left: var(--space-md);
+  border-left: 3px solid var(--neon-purple);
+}
+
+/* 画廊网格 */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+/* 作品卡片 */
+.gallery-card {
+  position: relative;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: var(--transition);
+  cursor: pointer;
+}
+.gallery-card:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.5), var(--glow-blue);
+}
+.gallery-card__image-wrapper {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-tertiary);
+  overflow: hidden;
+}
+.gallery-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.gallery-card:hover .gallery-card__image {
+  transform: scale(1.05);
+}
+.gallery-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: var(--transition);
+}
+.gallery-card:hover .gallery-card__overlay {
+  opacity: 1;
+}
+.gallery-card__overlay span {
+  font-size: 2rem;
+  color: var(--neon-blue);
+  font-weight: 300;
+}
+.gallery-card__caption {
+  display: block;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* 滚动动画 */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   导航栏
+   ============================================================ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: rgba(10,10,10,0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.nav__logo {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav__dots {
+  display: flex;
+  gap: var(--space-sm);
+}
+.nav__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border-default);
+  background: transparent;
+  transition: var(--transition);
+  display: block;
+}
+.nav__dot:hover,
+.nav__dot.active {
+  background: var(--neon-blue);
+  border-color: var(--neon-blue);
+  box-shadow: var(--glow-blue);
+}
+
+/* ============================================================
+   Hero 区
+   ============================================================ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  padding-top: 80px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero__content {
+  position: relative;
+  z-index: 1;
+}
+.hero__name {
+  font-family: var(--font-display);
+  font-size: var(--fs-hero);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.15;
+  margin-bottom: var(--space-md);
+  /* 霓虹发光效果 */
+  color: var(--neon-blue);
+  text-shadow:
+    0 0 7px var(--neon-blue),
+    0 0 10px var(--neon-blue),
+    0 0 21px var(--neon-blue),
+    0 0 42px var(--neon-purple),
+    0 0 82px var(--neon-purple),
+    0 0 120px var(--neon-pink);
+  animation: flicker 5s infinite alternate;
+}
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  90% { opacity: 1; }
+  92% { opacity: 0.95; }
+  94% { opacity: 1; }
+  96% { opacity: 0.97; }
+}
+.hero__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-subhead);
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 0.15em;
+  margin-bottom: var(--space-xl);
+}
+.hero__scroll {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-dim);
+  font-size: var(--fs-caption);
+  letter-spacing: 0.1em;
+  animation: bounce 2s infinite;
+}
+.hero__scroll::after {
+  content: '';
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--text-dim), transparent);
+}
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(10px); }
+}
+
+/* ============================================================
+   0/1 自我描述
+   ============================================================ */
+.intro__grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: var(--space-xl);
+  margin-bottom: var(--space-lg);
+}
+.intro__avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+.intro__avatar {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2px solid var(--border-default);
+  object-fit: cover;
+  background: var(--bg-tertiary);
+  transition: var(--transition);
+}
+.intro__avatar:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--glow-purple);
+}
+.intro__stats {
+  display: flex;
+  gap: var(--space-lg);
+}
+.intro__stat {
+  text-align: center;
+}
+.intro__stat-number {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.intro__stat-label {
+  font-size: var(--fs-caption);
+  color: var(--text-dim);
+}
+.intro__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.intro__info-row {
+  display: flex;
+  gap: var(--space-md);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+}
+.intro__info-row span:first-child {
+  color: var(--text-dim);
+  min-width: 45px;
+}
+.intro__bio {
+  margin-top: var(--space-md);
+  font-size: var(--fs-body);
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.intro__bio p {
+  margin-bottom: var(--space-sm);
+  position: relative;
+  padding-left: var(--space-md);
+}
+.intro__bio p::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--neon-purple);
+}
+
+/* 技能标签 */
+.skills-wrap {
+  margin: var(--space-lg) 0;
+}
+.skills-title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-caption);
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: var(--space-sm);
+  text-transform: uppercase;
+}
+.skills__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+.skill-tag {
+  display: inline-block;
+  padding: 5px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+  transition: var(--transition);
+}
+.skill-tag:hover {
+  border-color: var(--neon-blue);
+  color: var(--neon-blue);
+  box-shadow: var(--glow-blue);
+  transform: translateY(-2px);
+}
+
+/* 分类卡片 */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+}
+.category-card {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: flex-end;
+}
+.category-card:hover {
+  border-color: var(--border-glow);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}
+.category-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.5;
+  transition: var(--transition);
+}
+.category-card:hover .category-card__bg {
+  opacity: 0.7;
+  transform: scale(1.05);
+}
+.category-card__label {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: var(--space-md);
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+.category-card__name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.category-card__count {
+  font-size: var(--fs-caption);
+  color: var(--text-dim);
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  text-align: center;
+  padding: var(--space-2xl) var(--space-lg);
+  border-top: 1px solid var(--border-subtle);
+}
+.footer__cta {
+  font-family: var(--font-display);
+  font-size: var(--fs-heading);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.footer__contacts {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  font-size: var(--fs-small);
+  color: var(--text-secondary);
+}
+.footer__contact-item {
+  transition: var(--transition);
+  cursor: pointer;
+}
+.footer__contact-item:hover {
+  color: var(--neon-blue);
+}
+.footer__copy {
+  font-size: var(--fs-caption);
+  color: var(--text-dim);
+}
+
+/* ============================================================
+   响应式
+   ============================================================ */
+@media (max-width: 1024px) {
+  .category-grid { grid-template-columns: repeat(2, 1fr); }
+  .intro__grid { grid-template-columns: 1fr; text-align: center; }
+  .intro__avatar-wrap { flex-direction: row; justify-content: center; }
+  .intro__info-row { justify-content: center; }
+  .intro__bio p { padding-left: 0; }
+  .intro__bio p::before { display: none; }
+  .intro__stats { justify-content: center; }
+  .skills__tags { justify-content: center; }
+}
+@media (max-width: 768px) {
+  :root {
+    --section-gap: var(--space-xl);
+    --fs-hero: 2.5rem;
+  }
+  .section { padding: var(--section-gap) var(--space-md); }
+  .gallery-grid { grid-template-columns: 1fr; }
+  .category-grid { grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
+  .nav { padding: var(--space-sm) var(--space-md); }
+  .nav__dots { gap: 6px; }
+  .nav__dot { width: 8px; height: 8px; }
+  .hero__scroll { bottom: 20px; }
+  .footer__contacts { flex-direction: column; gap: var(--space-sm); }
+}
+
+/* ============================================================
+   打印样式（浏览器 Ctrl+P 导出 PDF）
+   ============================================================ */
+@media print {
+  .nav, .hero__scroll, .gallery-card__overlay { display: none !important; }
+  body { background: #fff; color: #111; font-size: 12pt; }
+  * { text-shadow: none !important; box-shadow: none !important; }
+  .hero { min-height: auto; padding: 40px 0; }
+  .hero__name { color: #111; }
+  .hero__title { color: #555; }
+  .section { padding: 30px 0; page-break-inside: avoid; }
+  .section-header { border-bottom-color: #ccc; }
+  .section-header__badge { border-color: #333; color: #333; }
+  .section-header__title { color: #111; }
+  .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .gallery-card { border-color: #ddd; break-inside: avoid; }
+  .gallery-card:hover { transform: none; }
+  .tool-tag, .skill-tag { border-color: #999; color: #333; }
+  .category-card { border-color: #ddd; break-inside: avoid; }
+  .footer { border-top-color: #ccc; }
+  .footer__cta { color: #111; }
+  img { max-width: 100% !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     导航栏
+     ============================================================ -->
+<nav class="nav" id="top-nav">
+  <span class="nav__logo" data-content="hero-name">PORTFOLIO</span>
+  <ul class="nav__dots">
+    <li><a href="#hero"   class="nav__dot active" aria-label="首页"></a></li>
+    <li><a href="#intro"  class="nav__dot" aria-label="自我介绍"></a></li>
+    <li><a href="#works1" class="nav__dot" aria-label="作品1"></a></li>
+    <li><a href="#works2" class="nav__dot" aria-label="作品2"></a></li>
+    <li><a href="#works3" class="nav__dot" aria-label="作品3"></a></li>
+    <li><a href="#works4" class="nav__dot" aria-label="作品4"></a></li>
+    <li><a href="#footer" class="nav__dot" aria-label="联系"></a></li>
+  </ul>
+</nav>
+
+<!-- ============================================================
+     Hero 区
+     ============================================================ -->
+<section class="hero" id="hero">
+  <div class="hero__content">
+    <h1 class="hero__name" data-content="hero-name">你的名字</h1>
+    <p class="hero__title" data-content="hero-title">视觉设计师 / 创意人</p>
+  </div>
+  <div class="hero__scroll">SCROLL</div>
+</section>
+
+<!-- ============================================================
+     Section 0/1 — 自我描述
+     ============================================================ -->
+<section class="section" id="intro">
+  <div class="section__inner">
+    <div class="section-header reveal">
+      <span class="section-header__badge" data-content="section-number">0/1</span>
+      <h2 class="section-header__title" data-content="section-title">自我描述</h2>
+      <div class="section-header__line"></div>
+    </div>
+
+    <div class="intro__grid reveal">
+      <!-- 头像 + 数据 -->
+      <div class="intro__avatar-wrap">
+        <!-- ★ 替换头像: 把 src 换成你的头像图片路径，推荐 400x400 正方形 -->
+        <img
+          class="intro__avatar"
+          src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Crect fill='%23111118' width='400' height='400' rx='200'/%3E%3Ctext fill='%23444' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='sans-serif' font-size='14'%3E头像%3C/text%3E%3C/svg%3E"
+          alt="头像"
+          data-content="avatar-img"
+          width="400"
+          height="400"
+        />
+        <div class="intro__stats">
+          <div class="intro__stat">
+            <span class="intro__stat-number" data-content="stat-years">10+</span>
+            <span class="intro__stat-label">年经验</span>
+          </div>
+          <div class="intro__stat">
+            <span class="intro__stat-number" data-content="stat-projects">200+</span>
+            <span class="intro__stat-label">个项目</span>
+          </div>
+          <div class="intro__stat">
+            <span class="intro__stat-number" data-content="stat-clients">50+</span>
+            <span class="intro__stat-label">家客户</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 个人信息 -->
+      <div>
+        <div class="intro__info">
+          <div class="intro__info-row">
+            <span>姓名</span>
+            <span data-content="bio-name">你的姓名</span>
+          </div>
+          <div class="intro__info-row">
+            <span>电话</span>
+            <span data-content="bio-phone">19158442883</span>
+          </div>
+          <div class="intro__info-row">
+            <span>邮箱</span>
+            <span data-content="bio-email">moshoudddd@outlook.com</span>
+          </div>
+          <div class="intro__info-row">
+            <span>微信</span>
+            <span data-content="bio-wechat">moshou_____</span>
+          </div>
+        </div>
+
+        <div class="intro__bio">
+          <p data-content="bio-text-1">专注视觉设计领域多年，擅长品牌视觉、产品渲染、动态设计等方向。</p>
+          <p data-content="bio-text-2">熟练掌握主流设计工具，能独立完成从创意构思到最终视觉输出的全流程工作。</p>
+          <p data-content="bio-text-3">注重细节与品质，追求极致的视觉效果，善于沟通协作，按时交付高质量作品。</p>
+          <p data-content="bio-text-4">持续关注行业前沿趋势，不断探索新技术与设计的融合可能。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 技能标签 -->
+    <div class="skills-wrap reveal">
+      <p class="skills-title">▸ 技能工具</p>
+      <div class="skills__tags">
+        <span class="skill-tag" data-content="skill-tag">Photoshop</span>
+        <span class="skill-tag" data-content="skill-tag">Illustrator</span>
+        <span class="skill-tag" data-content="skill-tag">Cinema 4D</span>
+        <span class="skill-tag" data-content="skill-tag">After Effects</span>
+        <span class="skill-tag" data-content="skill-tag">Octane Render</span>
+        <span class="skill-tag" data-content="skill-tag">Premiere Pro</span>
+        <span class="skill-tag" data-content="skill-tag">Midjourney</span>
+        <span class="skill-tag" data-content="skill-tag">Stable Diffusion</span>
+        <span class="skill-tag" data-content="skill-tag">DaVinci Resolve</span>
+      </div>
+    </div>
+
+    <!-- 分类缩略图 -->
+    <div class="category-grid reveal">
+      <!-- ★ 替换: 修改 data-content 文字 + bg-image 背景图 -->
+      <div class="category-card" data-content="category-1">
+        <div class="category-card__bg" style="background: linear-gradient(135deg, #1a1a3e, #0f0f23);"></div>
+        <div class="category-card__label">
+          <span class="category-card__name" data-content="category-1">品牌设计</span>
+          <span class="category-card__count" data-content="category-1-count">0 个项目</span>
+        </div>
+      </div>
+      <div class="category-card" data-content="category-2">
+        <div class="category-card__bg" style="background: linear-gradient(135deg, #2a1a2e, #140f23);"></div>
+        <div class="category-card__label">
+          <span class="category-card__name" data-content="category-2">三维渲染</span>
+          <span class="category-card__count" data-content="category-2-count">0 个项目</span>
+        </div>
+      </div>
+      <div class="category-card" data-content="category-3">
+        <div class="category-card__bg" style="background: linear-gradient(135deg, #1a2e2a, #0f231a);"></div>
+        <div class="category-card__label">
+          <span class="category-card__name" data-content="category-3">动态设计</span>
+          <span class="category-card__count" data-content="category-3-count">0 个项目</span>
+        </div>
+      </div>
+      <div class="category-card" data-content="category-4">
+        <div class="category-card__bg" style="background: linear-gradient(135deg, #2e1a2a, #230f1a);"></div>
+        <div class="category-card__label">
+          <span class="category-card__name" data-content="category-4">插画/AIGC</span>
+          <span class="category-card__count" data-content="category-4-count">0 个项目</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 1/4 — 作品展示
+     ============================================================ -->
+<section class="section" id="works1">
+  <div class="section__inner">
+    <div class="section-header reveal">
+      <span class="section-header__badge" data-content="section-number">1/4</span>
+      <h2 class="section-header__title" data-content="section-title">品牌设计</h2>
+      <div class="section-header__line"></div>
+    </div>
+
+    <div class="tool-tags reveal">
+      <span class="tool-tag" data-content="tool-tag">Photoshop</span>
+      <span class="tool-tag" data-content="tool-tag">Illustrator</span>
+      <span class="tool-tag" data-content="tool-tag">Figma</span>
+    </div>
+
+    <!-- 项目一 -->
+    <h3 class="sub-heading reveal" data-content="project-title">项目 01 — 品牌视觉</h3>
+    <div class="gallery-grid">
+      <!-- ★ 替换图片: 把 src= 改成你的图片路径 -->
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+    </div>
+
+    <!-- 项目二 -->
+    <h3 class="sub-heading reveal" data-content="project-title">项目 02 — 海报设计</h3>
+    <div class="gallery-grid">
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 2/4 — 三维渲染
+     ============================================================ -->
+<section class="section" id="works2">
+  <div class="section__inner">
+    <div class="section-header reveal">
+      <span class="section-header__badge" data-content="section-number">2/4</span>
+      <h2 class="section-header__title" data-content="section-title">三维渲染</h2>
+      <div class="section-header__line"></div>
+    </div>
+
+    <div class="tool-tags reveal">
+      <span class="tool-tag" data-content="tool-tag">Cinema 4D</span>
+      <span class="tool-tag" data-content="tool-tag">Octane Render</span>
+      <span class="tool-tag" data-content="tool-tag">Redshift</span>
+      <span class="tool-tag" data-content="tool-tag">Blender</span>
+    </div>
+
+    <h3 class="sub-heading reveal" data-content="project-title">项目 01 — 产品渲染</h3>
+    <div class="gallery-grid">
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+    </div>
+
+    <h3 class="sub-heading reveal" data-content="project-title">项目 02 — 场景搭建</h3>
+    <div class="gallery-grid">
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 3/4 — 动态设计
+     ============================================================ -->
+<section class="section" id="works3">
+  <div class="section__inner">
+    <div class="section-header reveal">
+      <span class="section-header__badge" data-content="section-number">3/4</span>
+      <h2 class="section-header__title" data-content="section-title">动态设计</h2>
+      <div class="section-header__line"></div>
+    </div>
+
+    <div class="tool-tags reveal">
+      <span class="tool-tag" data-content="tool-tag">After Effects</span>
+      <span class="tool-tag" data-content="tool-tag">Premiere Pro</span>
+      <span class="tool-tag" data-content="tool-tag">DaVinci Resolve</span>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Section 4/4 — 插画/AIGC
+     ============================================================ -->
+<section class="section" id="works4">
+  <div class="section__inner">
+    <div class="section-header reveal">
+      <span class="section-header__badge" data-content="section-number">4/4</span>
+      <h2 class="section-header__title" data-content="section-title">插画/AIGC</h2>
+      <div class="section-header__line"></div>
+    </div>
+
+    <div class="tool-tags reveal">
+      <span class="tool-tag" data-content="tool-tag">Midjourney</span>
+      <span class="tool-tag" data-content="tool-tag">Stable Diffusion</span>
+      <span class="tool-tag" data-content="tool-tag">Procreate</span>
+      <span class="tool-tag" data-content="tool-tag">Photoshop</span>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+      <div class="gallery-card reveal">
+        <div class="gallery-card__image-wrapper">
+          <img class="gallery-card__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23111118' width='800' height='600'/%3E%3Ctext fill='%23333' x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-family='monospace' font-size='14'%3E800 × 600%3C/text%3E%3C/svg%3E" alt="作品" data-content="gallery-image" width="800" height="600" loading="lazy">
+          <div class="gallery-card__overlay"><span>+</span></div>
+        </div>
+        <span class="gallery-card__caption" data-content="caption">作品名称</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     Footer
+     ============================================================ -->
+<footer class="footer section" id="footer">
+  <div class="section__inner reveal">
+    <p class="footer__cta" data-content="cta-text">期待与你的合作</p>
+    <div class="footer__contacts">
+      <span class="footer__contact-item" data-content="bio-email">moshoudddd@outlook.com</span>
+      <span class="footer__contact-item" data-content="bio-wechat">微信: moshou_____</span>
+      <span class="footer__contact-item" data-content="bio-phone">电话: 19158442883</span>
+    </div>
+    <p class="footer__copy" data-content="footer-text">© 2026 Your Name. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     JavaScript
+     ============================================================ -->
+<script>
+// ===== 导航高亮（Intersection Observer）=====
+const sections = document.querySelectorAll('section[id], footer[id]');
+const navDots = document.querySelectorAll('.nav__dot');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navDots.forEach(dot => {
+        dot.classList.toggle('active', dot.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { threshold: 0.4, rootMargin: '-80px 0px 0px 0px' });
+
+sections.forEach(section => observer.observe(section));
+
+// ===== 滚动淡入动画 =====
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+revealElements.forEach(el => revealObserver.observe(el));
+
+// ===== 首次加载时立即显示 Hero 区内容 =====
+document.addEventListener('DOMContentLoaded', () => {
+  // 立即显示首屏内已经可见的元素
+  setTimeout(() => {
+    document.querySelectorAll('.reveal').forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight) {
+        el.classList.add('visible');
+      }
+    });
+  }, 100);
+});
+</script>
+
+</body>
+</html>
